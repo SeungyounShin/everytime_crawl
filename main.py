@@ -37,7 +37,7 @@ class Everytime:
         return result_xml.text
         #return soup
 
-    def crawl_hotarticle(self):
+    def crawl_hotarticle(self,how_many_pages):
         hot_base_url = 'https://everytime.kr/hotarticle/p/'
         login_url = 'https://everytime.kr/user/login'
         payload = {'userid': self.userid, 'password': self.password}
@@ -45,7 +45,7 @@ class Everytime:
         with requests.Session() as session:
             login_ = session.post(login_url, data=payload)
 
-            for i in range(50):
+            for i in range(how_many_pages):
                 articles = session.post("http://everytime.kr/find/board/article/list", data={
                     'id': 'hotarticle',
                     'limit_num' : 20,
@@ -74,7 +74,7 @@ print(username, 'file saved\n')
 pat = re.compile(r'(([01]\d|2[0-3]):([0-5]\d)|24:00)-(([01]\d|2[0-3]):([0-5]\d)|24:00)')
 
 #hotarticle crawl
-hotarticles = e.crawl_hotarticle()
+hotarticles = e.crawl_hotarticle(50)
 f = open('./articles/hotarticles','w')
 f.write(str(hotarticles))
 f.close()
